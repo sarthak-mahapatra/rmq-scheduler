@@ -12,4 +12,5 @@ public class LiteralConstants {
     public static final String UUID = "uuid";
     public static final String ROUTING_KEY = "routingkey";
 
+    public static final String QUEUE_MESSAGE_COUNT = "QUEUE_MESSAGE_COUNT";
 }

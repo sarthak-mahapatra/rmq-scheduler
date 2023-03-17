@@ -1,5 +1,6 @@
 package com.maverick.rmqscheduler.controller;
 
+import com.maverick.rmqscheduler.constants.LiteralConstants;
 import com.maverick.rmqscheduler.dto.ApiResponseDto;
 import com.maverick.rmqscheduler.dto.MessageRequestDto;
 import com.maverick.rmqscheduler.service.MessageService;
@@ -26,11 +27,11 @@ public class MessageController {
 
     @PostMapping("/message")
     public ResponseEntity<ApiResponseDto> createMessage(
-            @RequestHeader("requestId") String requestId,
+            @RequestHeader(value = LiteralConstants.REQUEST_ID, required = false) String requestId,
             @RequestBody MessageRequestDto messageRequestDto
     ) {
         String uuid = Objects.nonNull(requestId) ? requestId : UUID.randomUUID().toString();
-        MDC.put("UUID", uuid);
+        MDC.put(LiteralConstants.UUID, uuid);
         log.info("MessageController.createMessage :: received message with uuid={}, messageRequestDto={}", uuid, messageRequestDto);
         ApiResponseDto result = messageService.createMessage(messageRequestDto);
         return new ResponseEntity<>(result, HttpStatus.ACCEPTED);

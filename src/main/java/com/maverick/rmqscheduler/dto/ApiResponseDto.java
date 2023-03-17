@@ -14,4 +14,8 @@ import lombok.*;
 public class ApiResponseDto {
 
     private String status;
+
+    private String uuid;
+
+    private Integer delay;
 }

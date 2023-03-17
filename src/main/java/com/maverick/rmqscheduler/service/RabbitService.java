@@ -31,4 +31,20 @@ public class RabbitService {
         return true;
     }
 
+    public boolean pushMessageToQueueWithExpiry(final Object payLoad, String queueName, Integer expiryInMs) {
+        log.info("RabbitService.pushEventToQueue :: Called with payLoad = {} and queueName = {}, expiryInMs = {}",
+                payLoad, queueName, expiryInMs);
+        MessageDto message = MessageDto.builder().payload(payLoad).uuid(MDC.get(LiteralConstants.UUID)).build();
+        log.info("RabbitService.pushEventToQueue :: Message={} created", message);
+        String routingKey = String.join(".", LiteralConstants.ROUTING_KEY, queueName);
+        rabbitTemplate.convertAndSend(exchange, routingKey, message, messagePostProcessor -> {
+            messagePostProcessor.getMessageProperties().setCorrelationId(MDC.get(LiteralConstants.UUID));
+            messagePostProcessor.getMessageProperties().setExpiration(String.valueOf(expiryInMs));
+            return messagePostProcessor;
+        });
+        log.info("RabbitService.pushEventToQueue :: Successfully Sent queueEvent to {} with expiryInMs={}",
+                queueName, expiryInMs);
+        return true;
+    }
+
 }

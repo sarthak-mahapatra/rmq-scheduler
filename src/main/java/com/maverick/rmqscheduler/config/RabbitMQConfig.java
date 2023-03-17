@@ -17,7 +17,7 @@ import org.springframework.util.ErrorHandler;
 
 @Configuration
 @EnableRabbit
-public class RabbitMQConfig extends RabbitMQTopology {
+public class RabbitMQConfig {
 
     @Value("${spring.rabbitmq.host}")
     private String rabbitHost;

@@ -7,9 +7,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Slf4j
+@Service
 public class RabbitService {
 
     private final RabbitTemplate rabbitTemplate;
@@ -22,7 +24,7 @@ public class RabbitService {
         log.info("RabbitService.pushEventToQueue :: Called with payLoad = {} and queueName = {}", payLoad, queueName);
         MessageDto message = MessageDto.builder().payload(payLoad).uuid(MDC.get(LiteralConstants.UUID)).build();
         log.info("RabbitService.pushEventToQueue :: Message={} created", message);
-        String routingKey = String.join(".", LiteralConstants.ROUTING_KEY, queueName);
+        String routingKey = String.join(".", queueName, LiteralConstants.ROUTING_KEY);
         rabbitTemplate.convertAndSend(exchange, routingKey, message, messagePostProcessor -> {
             messagePostProcessor.getMessageProperties().setCorrelationId(MDC.get(LiteralConstants.UUID));
             return messagePostProcessor;
@@ -31,12 +33,12 @@ public class RabbitService {
         return true;
     }
 
-    public boolean pushMessageToQueueWithExpiry(final Object payLoad, String queueName, Integer expiryInMs) {
+    public boolean pushMessageToQueueWithExpiry(final Object payLoad, String queueName, Long expiryInMs) {
         log.info("RabbitService.pushEventToQueue :: Called with payLoad = {} and queueName = {}, expiryInMs = {}",
                 payLoad, queueName, expiryInMs);
-        MessageDto message = MessageDto.builder().payload(payLoad).uuid(MDC.get(LiteralConstants.UUID)).build();
+        MessageDto message = MessageDto.builder().payload(payLoad).uuid(MDC.get(LiteralConstants.UUID)).delayInMs(expiryInMs).build();
         log.info("RabbitService.pushEventToQueue :: Message={} created", message);
-        String routingKey = String.join(".", LiteralConstants.ROUTING_KEY, queueName);
+        String routingKey = String.join(".", queueName, LiteralConstants.ROUTING_KEY);
         rabbitTemplate.convertAndSend(exchange, routingKey, message, messagePostProcessor -> {
             messagePostProcessor.getMessageProperties().setCorrelationId(MDC.get(LiteralConstants.UUID));
             messagePostProcessor.getMessageProperties().setExpiration(String.valueOf(expiryInMs));

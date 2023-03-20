@@ -16,10 +16,11 @@ public class LiteralConstants {
 
     public static final String REQUEST_ID = "requestId";
 
-    public static final String DEAD_LETTER = "dead-letter";
+    public static final String DEAD_LETTER = "dead.letter";
 
     public static final String X_DEAD_LETTER_EXCHANGE = "x-dead-letter-exchange";
     public static final String X_DEAD_LETTER_ROUTING_KEY = "x-dead-letter-routing-key";
+    public static final String CORRELATION_ID = "correlationId";
     public static final String SUCCESS = "SUCCESS";
     public static final String FAILURE = "FAILURE";
 }

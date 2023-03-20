@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+
+  lms:
+    image: rmq-scheduler
+    container_name: "rmq-scheduler"
+    ports:
+      - "8077:8077"

@@ -16,4 +16,6 @@ public class MessageDto {
     private String uuid;
 
     private Object payload;
+
+    private Long delayInMs;
 }

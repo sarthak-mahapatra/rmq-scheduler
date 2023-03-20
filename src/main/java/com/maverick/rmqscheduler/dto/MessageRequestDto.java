@@ -15,5 +15,5 @@ public class MessageRequestDto {
 
     private String message;
 
-    private Integer delayInMs;
+    private Long delayInMs;
 }

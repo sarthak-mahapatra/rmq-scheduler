@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!-- <Pattern>%d{yyyy-MM-dd_HH:mm:ss.SSS} %-5level %logger{10} - %msg%n</Pattern> -->
+            <!--code for kibana including milliseconds precision in log events -->
+            <Pattern>%X{requestId} %d{yyyy-MM-dd'T'HH:mm:ss.SSSZ} %-5level %logger{36} - %msg%n
+            </Pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>rmqscheduler.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!-- <Pattern>%d{yyyy-MM-dd_HH:mm:ss.SSS} [%thread] %-5level %logger{10} - %msg%n </Pattern> -->
+            <!-- code for kibana including milliseconds precision in log events -->
+            <Pattern>%X{requestId} %d{yyyy-MM-dd'T'HH:mm:ss.SSSZ} [%thread] %-5level %logger{36} - %msg%n
+            </Pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>rmqscheduler.%d{yyyy-MM-dd}_%i.log
+            </fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>5MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <root level="DEBUG">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="STDOUT"/>
+    </root>
+    <!-- logger will override root -->
+    <logger name="org.springframework" level="DEBUG"/>
+</configuration>

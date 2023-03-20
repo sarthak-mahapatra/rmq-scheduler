@@ -17,5 +17,5 @@ public class ApiResponseDto {
 
     private String uuid;
 
-    private Integer delay;
+    private Long delay;
 }

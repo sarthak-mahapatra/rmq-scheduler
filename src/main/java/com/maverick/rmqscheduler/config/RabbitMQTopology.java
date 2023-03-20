@@ -27,15 +27,15 @@ public class RabbitMQTopology {
 
     @Bean
     public DirectExchange deadLetterExchange() {
-        return ExchangeBuilder.directExchange(LiteralConstants.DEAD_LETTER.concat(this.exchange)).build();
+        return ExchangeBuilder.directExchange(String.join(".", LiteralConstants.DEAD_LETTER, this.exchange)).build();
     }
 
     @Bean
     public Queue backoffQueue() {
         return QueueBuilder.durable(backOffQueueName)
-                .withArgument(LiteralConstants.X_DEAD_LETTER_EXCHANGE, LiteralConstants.DEAD_LETTER.concat(this.exchange))
+                .withArgument(LiteralConstants.X_DEAD_LETTER_EXCHANGE, String.join(".", LiteralConstants.DEAD_LETTER, this.exchange))
                 .withArgument(LiteralConstants.X_DEAD_LETTER_ROUTING_KEY,
-                        String.join(".", backOffQueueName, LiteralConstants.ROUTING_KEY))
+                        String.join(".", processingQueueName, LiteralConstants.ROUTING_KEY))
                 .build();
     }
 

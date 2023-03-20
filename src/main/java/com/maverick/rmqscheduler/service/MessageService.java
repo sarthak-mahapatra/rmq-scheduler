@@ -2,6 +2,7 @@ package com.maverick.rmqscheduler.service;
 
 import com.maverick.rmqscheduler.constants.LiteralConstants;
 import com.maverick.rmqscheduler.dto.ApiResponseDto;
+import com.maverick.rmqscheduler.dto.MessageDto;
 import com.maverick.rmqscheduler.dto.MessageRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,4 +33,10 @@ public class MessageService {
                 .build();
     }
 
+    public void processMessage(MessageDto message, String delay, String correlationId) {
+        log.info("MessageService.processMessage() :: processing message={}", message);
+        String receivedMessage = message.getPayload().toString();
+        log.info("MessageService.processMessage() :: uuidFromProperties={}, uuidFromMessage={}", correlationId, message.getUuid());
+        log.info("MessageService.processMessage() :: processed message={} with delay={}", receivedMessage, message.getDelayInMs());
+    }
 }

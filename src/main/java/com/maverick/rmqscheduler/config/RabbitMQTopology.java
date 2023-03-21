@@ -13,8 +13,8 @@ public class RabbitMQTopology {
     @Value("${messaging.exchange}")
     private String exchange;
 
-    @Value("${messaging.backoff.queue.name}")
-    private String backOffQueueName;
+    @Value("${messaging.staging.queue.name}")
+    private String stagingQueueName;
 
     @Value("${messaging.processing.queue.name}")
     private String processingQueueName;
@@ -31,12 +31,13 @@ public class RabbitMQTopology {
     }
 
     @Bean
-    public Queue backoffQueue() {
-        return QueueBuilder.durable(backOffQueueName)
-                .withArgument(LiteralConstants.X_DEAD_LETTER_EXCHANGE, String.join(".", LiteralConstants.DEAD_LETTER, this.exchange))
-                .withArgument(LiteralConstants.X_DEAD_LETTER_ROUTING_KEY,
-                        String.join(".", processingQueueName, LiteralConstants.ROUTING_KEY))
-                .build();
+    public Queue stagingQueue() {
+        return QueueBuilder.durable(stagingQueueName).build();
+    }
+
+    @Bean
+    public Queue demoQueue() {
+        return QueueBuilder.durable(LiteralConstants.DEMO_QUEUE).build();
     }
 
     @Bean
@@ -44,31 +45,32 @@ public class RabbitMQTopology {
         return QueueBuilder.durable(processingQueueName).build();
     }
 
-    @Bean
-    public Binding backoffQueueDeadLetterBinding() {
-        return BindingBuilder.bind(backoffQueue())
-                .to(deadLetterExchange())
-                .with(String.join(".", backOffQueueName, LiteralConstants.ROUTING_KEY));
-    }
 
     @Bean
-    public Binding backoffQueueBinding() {
-        return BindingBuilder.bind(backoffQueue())
+    public Binding stagingQueueBinding() {
+        return BindingBuilder.bind(stagingQueue())
                 .to(exchange())
-                .with(String.join(".", backOffQueueName, LiteralConstants.ROUTING_KEY));
+                .with(String.join(".", stagingQueueName, LiteralConstants.ROUTING_KEY));
     }
 
     @Bean
-    public Binding processingQueueDeadLetterBinding() {
-        return BindingBuilder.bind(processingQueue())
-                .to(deadLetterExchange())
-                .with(String.join(".", processingQueueName, LiteralConstants.ROUTING_KEY));
+    public Binding demoQueueBinding() {
+        return BindingBuilder.bind(demoQueue())
+                .to(exchange())
+                .with(String.join(".", LiteralConstants.DEMO_QUEUE, LiteralConstants.ROUTING_KEY));
     }
 
     @Bean
     public Binding processingQueueBinding() {
         return BindingBuilder.bind(processingQueue())
                 .to(exchange())
+                .with(String.join(".", processingQueueName, LiteralConstants.ROUTING_KEY));
+    }
+
+    @Bean
+    public Binding processingQueueDeadLetterBinding() {
+        return BindingBuilder.bind(processingQueue())
+                .to(deadLetterExchange())
                 .with(String.join(".", processingQueueName, LiteralConstants.ROUTING_KEY));
     }
 

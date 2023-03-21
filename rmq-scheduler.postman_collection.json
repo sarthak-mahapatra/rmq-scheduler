@@ -1,0 +1,66 @@
+{
+	"info": {
+		"_postman_id": "7ccbb52d-4a3d-40a3-9b10-1e7eec8eb2e6",
+		"name": "rmq-scheduler",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6149230"
+	},
+	"item": [
+		{
+			"name": "create message long delay",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"payload\": \"FOOBARx10\",\n    \"delayInMs\": 5000,\n    \"queueName\": \"rmq.scheduler.demo.queue\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8077/message",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8077",
+					"path": [
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create message short delay",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"payload\": \"FOOBAR\",\n    \"delayInMs\": 5000,\n    \"queueName\": \"rmq.scheduler.demo.queue\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8077/message",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8077",
+					"path": [
+						"message"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

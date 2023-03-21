@@ -23,4 +23,11 @@ public class LiteralConstants {
     public static final String CORRELATION_ID = "correlationId";
     public static final String SUCCESS = "SUCCESS";
     public static final String FAILURE = "FAILURE";
+    public static final String QUEUE_SEPARATOR = ".";
+    public static final String UNDERSCORE = "_";
+    public static final String BACKOFF_QUEUE_POSTFIX = "rmq.scheduler.backoff.queue";
+
+
+    public static final String DELAY = "delay";
+    public static final String DEMO_QUEUE = "rmq.scheduler.demo.queue";
 }

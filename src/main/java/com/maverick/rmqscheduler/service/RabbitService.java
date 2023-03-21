@@ -20,33 +20,27 @@ public class RabbitService {
     private String exchange;
 
 
-    public boolean pushMessageToQueue(final Object payLoad, String queueName) {
-        log.info("RabbitService.pushEventToQueue :: Called with payLoad = {} and queueName = {}", payLoad, queueName);
-        MessageDto message = MessageDto.builder().payload(payLoad).uuid(MDC.get(LiteralConstants.UUID)).build();
-        log.info("RabbitService.pushEventToQueue :: Message={} created", message);
+    public void pushMessageToQueue(final Object message, String queueName) {
+        log.info("RabbitService.pushEventToQueue :: Called with messageDto = {} and queueName = {}", message, queueName);
         String routingKey = String.join(".", queueName, LiteralConstants.ROUTING_KEY);
         rabbitTemplate.convertAndSend(exchange, routingKey, message, messagePostProcessor -> {
             messagePostProcessor.getMessageProperties().setCorrelationId(MDC.get(LiteralConstants.UUID));
             return messagePostProcessor;
         });
         log.info("RabbitService.pushEventToQueue :: Successfully Sent queueEvent to {}", queueName);
-        return true;
     }
 
-    public boolean pushMessageToQueueWithExpiry(final Object payLoad, String queueName, Long expiryInMs) {
+    public void pushMessageToQueueWithExpiry(final MessageDto messageDto, String queueName, Long expiryInMs) {
         log.info("RabbitService.pushEventToQueue :: Called with payLoad = {} and queueName = {}, expiryInMs = {}",
-                payLoad, queueName, expiryInMs);
-        MessageDto message = MessageDto.builder().payload(payLoad).uuid(MDC.get(LiteralConstants.UUID)).delayInMs(expiryInMs).build();
-        log.info("RabbitService.pushEventToQueue :: Message={} created", message);
+                messageDto, queueName, expiryInMs);
         String routingKey = String.join(".", queueName, LiteralConstants.ROUTING_KEY);
-        rabbitTemplate.convertAndSend(exchange, routingKey, message, messagePostProcessor -> {
+        rabbitTemplate.convertAndSend(exchange, routingKey, messageDto, messagePostProcessor -> {
             messagePostProcessor.getMessageProperties().setCorrelationId(MDC.get(LiteralConstants.UUID));
             messagePostProcessor.getMessageProperties().setExpiration(String.valueOf(expiryInMs));
             return messagePostProcessor;
         });
         log.info("RabbitService.pushEventToQueue :: Successfully Sent queueEvent to {} with expiryInMs={}",
                 queueName, expiryInMs);
-        return true;
     }
 
 }

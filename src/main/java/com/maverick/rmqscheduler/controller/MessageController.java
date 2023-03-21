@@ -4,6 +4,7 @@ import com.maverick.rmqscheduler.constants.LiteralConstants;
 import com.maverick.rmqscheduler.dto.ApiResponseDto;
 import com.maverick.rmqscheduler.dto.MessageRequestDto;
 import com.maverick.rmqscheduler.service.MessageService;
+import com.maverick.rmqscheduler.util.RMQSchedulerUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
@@ -34,6 +35,6 @@ public class MessageController {
         MDC.put(LiteralConstants.UUID, uuid);
         log.info("MessageController.createMessage :: received message with uuid={}, messageRequestDto={}", uuid, messageRequestDto);
         ApiResponseDto result = messageService.createMessage(messageRequestDto);
-        return new ResponseEntity<>(result, HttpStatus.ACCEPTED);
+        return RMQSchedulerUtil.getResponseEntity(result.getStatus(), null, HttpStatus.ACCEPTED);
     }
 }

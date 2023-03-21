@@ -36,6 +36,11 @@ public class RabbitMQTopology {
     }
 
     @Bean
+    public Queue demoQueue() {
+        return QueueBuilder.durable(LiteralConstants.DEMO_QUEUE).build();
+    }
+
+    @Bean
     public Queue processingQueue() {
         return QueueBuilder.durable(processingQueueName).build();
     }
@@ -49,9 +54,23 @@ public class RabbitMQTopology {
     }
 
     @Bean
+    public Binding demoQueueBinding() {
+        return BindingBuilder.bind(demoQueue())
+                .to(exchange())
+                .with(String.join(".", LiteralConstants.DEMO_QUEUE, LiteralConstants.ROUTING_KEY));
+    }
+
+    @Bean
     public Binding processingQueueBinding() {
         return BindingBuilder.bind(processingQueue())
                 .to(exchange())
+                .with(String.join(".", processingQueueName, LiteralConstants.ROUTING_KEY));
+    }
+
+    @Bean
+    public Binding processingQueueDeadLetterBinding() {
+        return BindingBuilder.bind(processingQueue())
+                .to(deadLetterExchange())
                 .with(String.join(".", processingQueueName, LiteralConstants.ROUTING_KEY));
     }
 

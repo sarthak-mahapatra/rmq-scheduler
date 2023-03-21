@@ -18,4 +18,6 @@ public class MessageDto {
     private Object payload;
 
     private Long delayInMs;
+
+    private String queueName;
 }

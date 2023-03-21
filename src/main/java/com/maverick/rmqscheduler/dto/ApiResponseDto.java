@@ -10,12 +10,12 @@ import lombok.*;
 @EqualsAndHashCode
 @ToString
 @RequiredArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIgnoreProperties(ignoreUnknown = true   )
 public class ApiResponseDto {
 
     private String status;
 
     private String uuid;
 
-    private Long delay;
+    private String errorMessage;
 }

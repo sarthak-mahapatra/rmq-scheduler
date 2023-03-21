@@ -13,7 +13,9 @@ import lombok.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MessageRequestDto {
 
-    private String message;
+    private Object payload;
 
     private Long delayInMs;
+
+    private String queueName;
 }

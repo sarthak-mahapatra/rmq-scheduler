@@ -7,25 +7,23 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.amqp.core.Message;
-import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
-@Component(value = "ProcessingQueueListener")
+@Component(value = "StagingQueueListener")
 @RequiredArgsConstructor
 @Slf4j
-public class ProcessingQueueListener {
+public class StagingQueueListener {
 
     private final MessageService messageService;
 
-    @RabbitListener(queues = "${messaging.processing.queue.name}", containerFactory = "simpleRabbitListenerContainerFactory")
+    @RabbitListener(queues = "${messaging.staging.queue.name}", containerFactory = "simpleRabbitListenerContainerFactory")
     protected void listenMessage(
             MessageDto messageDto, Message message) {
-        log.info("ProcessingQueueListener.listenMessage() :: consumed message={}", message);
-        MessageProperties messageProperties = message.getMessageProperties();
-        String correlationId = messageProperties.getCorrelationId();
+        String correlationId = message.getMessageProperties().getCorrelationId();
         MDC.put(LiteralConstants.UUID, correlationId);
-        messageService.processMessage(messageDto);
-        messageService.deleteBackoffQueuesIfEmpty(messageDto);
+        log.info("ProcessingQueueListener.listenMessage() :: consumed message={} with correlationId={}", messageDto, correlationId);
+        messageService.enqueueMessage(messageDto);
     }
 }

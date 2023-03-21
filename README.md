@@ -29,6 +29,9 @@ If the queue is existing , the service then creates a backoff queue with a name 
 
 The backoff queue is bound to a dead letter exchange using the x-dead-letter-exchange argument. When the message's TTL (time-to-live) expires, it will be routed to the dead letter exchange using the x-dead-letter-routing-key argument. This is set as the routing key for the processing queue The dead letter exchange will then route the message to the processing queue, where it will be consumed and sent to the appropriate queue mentioned in the original request body.
 
+### Backoff Queue pattern - <DELAY>_delay.rmq.scheduler.backoff.queue 
+
+Example - if delay = 5000 , then backoff queue = 5000_delay.rmq.scheduler.backoff.queue 
 
 ## Setup
 To run the service, you will need to have RabbitMQ installed and running. You will also need to update the application.properties file with your RabbitMQ connection details. We need to build the service using command below.

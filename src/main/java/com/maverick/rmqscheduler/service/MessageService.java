@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -38,7 +37,7 @@ public class MessageService {
         rabbitService.pushMessageToQueue(prepareMessageForStaging(messageRequestDto), stagingQueueName);
         return ApiResponseDto.builder()
                 .uuid(MDC.get(LiteralConstants.UUID))
-                .status(HttpStatus.ACCEPTED.toString())
+                .status(LiteralConstants.SUCCESS)
                 .build();
     }
 

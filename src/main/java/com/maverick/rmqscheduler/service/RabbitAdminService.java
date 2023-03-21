@@ -67,6 +67,7 @@ public class RabbitAdminService {
         if (queueInformation.getMessageCount() == 0) {
             rabbitAdmin.deleteQueue(backoffQueueName, true, true);
             log.info("RabbitAdminService.deleteBackoffQueuesIfUnused() :: deleted unused queue={}", backoffQueueName);
+            return;
         }
         log.info("RabbitAdminService.deleteBackoffQueuesIfUnused() :: queueName={} not deleted due to messageCount={}",
                 backoffQueueName, queueInformation.getMessageCount());

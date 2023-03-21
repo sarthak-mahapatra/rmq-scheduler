@@ -22,34 +22,6 @@ Example request body:
   "delayInMs": 5000
 }
 ```
-
-Sure! Here's the markdown code for the README:
-
-css
-Copy code
-# Spring Boot Service with RabbitMQ Message Scheduling
-
-This is a sample Spring Boot service that demonstrates how to use RabbitMQ to schedule messages with a delay. The service provides a REST API endpoint that allows clients to schedule a message with a delay by specifying the queue name, payload, and delay in milliseconds in the request body.
-
-## API Endpoint
-
-The API endpoint is a POST request to `/message`. The request body should be in JSON format and should include the following fields:
-
-- `queueName`: The name of the queue where the message will be sent.
-- `payload`: The payload of the message.
-- `delayInMs`: The delay in milliseconds before the message should be processed.
-
-Example request body:
-
-```json
-{
-  "queueName": "myQueue",
-  "payload": {
-    "message": "Hello, world!"
-  },
-  "delayInMs": 5000
-}
-
 ## Message Scheduling
 When a message is scheduled, the service first validates the presence of the queue specified in the request body. If the queue does not exist, the service returns an error with 400 HTTP STATUS.
 

@@ -1,4 +1,3 @@
-# rmq-scheduler
 
 ## Spring Boot Service with RabbitMQ Message Scheduling
 

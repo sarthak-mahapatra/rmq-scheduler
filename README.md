@@ -27,7 +27,7 @@ When a message is scheduled, the service first validates the presence of the que
 
 If the queue is existing , the service then creates a backoff queue with a name based on the specified delay(see pattern below), if it does not already exist. The backoff queue is used to delay the delivery of the message. There are no consumers for this queue so it acts as a parking lot queue to hold message with that specific delay till the TTL has elapsed.
 
-The backoff queue is bound to a dead letter exchange using the x-dead-letter-exchange argument. When the message's TTL (time-to-live) expires, it will be routed to the dead letter exchange using the x-dead-letter-routing-key argument. This is set as the routing key for the processing queue The dead letter exchange will then route the message to the processing queue, where it will be consumed and sent to the appropriate queue mentioned in the original request body.
+The backoff queue is bound to a dead letter exchange using the x-dead-letter-exchange argument. When the message's TTL (time-to-live) expires, it will be routed to the dead letter exchange using the x-dead-letter-routing-key argument. This is set as the routing key for the processing queue The dead letter exchange will then route the message to the processing queue, where it will be consumed and sent to the appropriate queue mentioned in the original request body. Once the messages are routed to the desired queue , the processing queue listener also checks to see if the backoff queue is no longer in use and proceeds to delete it if the message count has reached zero.
 
 ### Backoff Queue pattern - {DELAY}_delay.rmq.scheduler.backoff.queue 
 
